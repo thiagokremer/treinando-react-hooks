@@ -2,24 +2,25 @@ import {useState, useEffect} from "react"
 
 const GeradorGatos = () => {
     const [dados, setDados] = useState('')
+    const [erro, setErro] = useState('')
 
-    useEffect(() => {
+    useEffect(()=>{
         const getApi = async () => {
             try {
                 const resposta = await fetch('https://api.thecatapi.com/v1/images/search')
                 if (resposta.status !== 200) {
-                    throw new Error("Erro ao buscar o gatinho");
+                    throw new Error("Erro ao buscar o gatinho, recarregue a página");
                 }
                 const dados = await resposta.json()
                 setDados(dados[0].url)
 
             } catch (error) {
-                console.log(error.messsage)
+                setErro(error.message)
             }
         
         }
         getApi()
-    }, [])
+    },[])
 
     return(
         <>
@@ -32,6 +33,9 @@ const GeradorGatos = () => {
                 </>
             )}
 
+            { erro !== '' && (
+                <p>{erro}</p>
+            )}
         </>
     )
 }
